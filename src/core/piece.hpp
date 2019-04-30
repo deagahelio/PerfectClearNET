@@ -60,6 +60,7 @@ namespace core {
                 : rotateType(rotateType), points(points), harddropColliders(harddropColliders),
                   minX(minMaxX.first), maxX(minMaxX.second), minY(minMaxY.first), maxY(minMaxY.second),
                   width(minMaxX.second - minMaxX.first + 1), height(minMaxY.second - minMaxY.first + 1), mask_(mask) {
+            assert(points[0].x == 0 && points[0].y == 0);
         };
 
         const Bitboard mask_;  // 左下揃えになるように移動
