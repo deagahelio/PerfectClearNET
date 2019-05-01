@@ -1,5 +1,7 @@
 #include "main.hpp"
 
+#pragma unmanaged
+
 core::PieceType charToPiece(char x) {
 	switch (x) {
 		case 'S':
