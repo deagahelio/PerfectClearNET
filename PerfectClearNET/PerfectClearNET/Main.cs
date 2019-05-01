@@ -6,7 +6,7 @@ using System.Text;
 
 namespace PerfectClearNET {
     static class Interface {
-        [DllImport("sfinder.dll")]
+        [DllImport("sfinder-dll.dll")]
         private static extern void action(string field, string queue, string hold, StringBuilder str, int len);
 
         public static string Process(string field, string queue, string hold) {
@@ -40,7 +40,7 @@ namespace PerfectClearNET {
             string result = Interface.Process(f, q, h);
 
             if (!result.Equals("-1")) {
-
+                int a = 123;
             }
         }
     }
