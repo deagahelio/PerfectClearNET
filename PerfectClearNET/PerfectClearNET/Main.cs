@@ -1,8 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace PerfectClearNET {
     static class Interface {
@@ -23,7 +22,7 @@ namespace PerfectClearNET {
 
         static PerfectClear() {}
 
-        public static void Find(int[,] field, int[] queue, int current, int? hold) {
+        public static async void Find(int[,] field, int[] queue, int current, int? hold) {
             string f = "";
 
             for (int i = 0; i < 24; i++)
@@ -36,12 +35,16 @@ namespace PerfectClearNET {
                 q += MinoMap[queue[i]];
 
             string h = (hold == null) ? "E" : MinoMap[hold.Value];
-            
-            string result = Interface.Process(f, q, h);
 
-            if (!result.Equals("-1")) {
-                int a = 123;
-            }
+            string result = "";
+
+            await Task.Run(() => {
+                result = Interface.Process(f, q, h);
+                
+                if (!result.Equals("-1")) {
+                    int a = 123;
+                }
+            });
         }
     }
 }
