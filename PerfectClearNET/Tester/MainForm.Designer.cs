@@ -31,9 +31,9 @@
             // 
             this.Run.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(24)))), ((int)(((byte)(24)))), ((int)(((byte)(24)))));
             this.Run.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.Run.Location = new System.Drawing.Point(116, 48);
+            this.Run.Location = new System.Drawing.Point(15, 12);
             this.Run.Name = "Run";
-            this.Run.Size = new System.Drawing.Size(68, 32);
+            this.Run.Size = new System.Drawing.Size(48, 27);
             this.Run.TabIndex = 0;
             this.Run.Text = "Run";
             this.Run.UseVisualStyleBackColor = false;
@@ -42,7 +42,7 @@
             // Display
             // 
             this.Display.AutoSize = true;
-            this.Display.Location = new System.Drawing.Point(12, 180);
+            this.Display.Location = new System.Drawing.Point(69, 19);
             this.Display.Name = "Display";
             this.Display.Size = new System.Drawing.Size(28, 13);
             this.Display.TabIndex = 1;
@@ -53,7 +53,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(16)))), ((int)(((byte)(16)))), ((int)(((byte)(16)))));
-            this.ClientSize = new System.Drawing.Size(306, 228);
+            this.ClientSize = new System.Drawing.Size(414, 50);
             this.Controls.Add(this.Display);
             this.Controls.Add(this.Run);
             this.ForeColor = System.Drawing.Color.Gainsboro;
