@@ -27,7 +27,7 @@ core::PieceType charToPiece(char x) {
 	}
 }
 
-DLL void action(const char* _field, const char* _queue, const char* _hold, char* _str, int _len) {
+DLL void action(const char* _field, const char* _queue, const char* _hold, int height, char* _str, int _len) {
 	auto field = core::createField(_field);
 
 	auto pieces = std::vector<core::PieceType>();
@@ -39,19 +39,28 @@ DLL void action(const char* _field, const char* _queue, const char* _hold, char*
 	
 	for (const char* p = &_queue[0]; *p != '\0'; ++p)
 		pieces.push_back(charToPiece(*p));
-
-	auto result = pcfinder.run(field, pieces, pieces.size(), 6, holdEmpty);
-
+		
 	std::stringstream out;
 
-	if (!result.empty())
-		for (const auto &item : result)
-			out << item.pieceType << ","
+	bool solved = false;
+
+	for (int i = height; i <= 20; i += 4) {
+		auto result = pcfinder.run(field, pieces, pieces.size(), i, holdEmpty);
+
+		if (!result.empty()) {
+			solved = true;
+
+			for (const auto &item : result)
+				out << item.pieceType << ","
 				<< item.rotateType << ","
 				<< item.x << ","
 				<< item.y << "|";
 
-	else out << "-1";
+			break;
+		}
+	}
+
+	if (!solved) out << "-1";
 
 	std::string a = out.str();
 	std::copy(a.c_str(), a.c_str() + a.length() + 1, _str);
