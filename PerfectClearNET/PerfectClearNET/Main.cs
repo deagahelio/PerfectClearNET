@@ -1,7 +1,15 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
+
+// Suppresses readonly suggestion
+[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0044")]
+
+// Suppresses naming rule violation
+[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE1006")]
 
 namespace PerfectClearNET {
     static class Interface {
@@ -27,16 +35,41 @@ namespace PerfectClearNET {
         }
     }
 
-    public static class PerfectClear {
-        private static readonly string[] MinoMap = new string[7] {
+    public static class Mino {
+        public static readonly string[] ToChar = new string[7] {
             "S", "Z", "L", "J", "T", "O", "I"
         };
 
-        public delegate void AbortedEventHandler();
-        public static event AbortedEventHandler SearchAborted;
+        public static readonly int[] FromFinder = new int[7] {
+            4, 6, 3, 2, 0, 1, 5
+        };
+    }
 
-        public delegate void FinishedEventHandler(bool success, string result);
-        public static event FinishedEventHandler SearchFinished;
+    public class Operation {
+        #pragma warning disable 0169
+        int piece;
+        int x;
+        int y;
+        int r;
+        #pragma warning restore 0169
+
+        public Operation(string input) {
+            List<int> parsed = (from i in input.Split(',') select Convert.ToInt32(i)).ToList();
+
+            piece = Mino.FromFinder[parsed[0]];
+            x = parsed[1];
+            y = parsed[2];
+            r = parsed[3];
+        }
+
+        public override string ToString() => $"{Mino.ToChar[piece]}={x},{y},{r}";
+    }
+
+    public static class PerfectClear {
+        public delegate void FinishedEventHandler(bool success);
+        public static event FinishedEventHandler Finished;
+
+        public static List<Operation> LastSolution = new List<Operation>();
 
         static PerfectClear() {}
 
@@ -56,12 +89,12 @@ namespace PerfectClearNET {
                     }
                 }
 
-            string q = MinoMap[current];
+            string q = Mino.ToChar[current];
 
             for (int i = 0; i < queue.Length; i++)
-                q += MinoMap[queue[i]];
+                q += Mino.ToChar[queue[i]];
 
-            string h = (hold == null) ? "E" : MinoMap[hold.Value];
+            string h = (hold == null) ? "E" : Mino.ToChar[hold.Value];
 
             if (c % 4 == 2) t += 1;
 
@@ -70,14 +103,17 @@ namespace PerfectClearNET {
             await Task.Run(() => {
                 result = Interface.Process(f, q, h, t);
 
-                if (result.Equals("")) {
-                    SearchAborted?.Invoke();
+                if (result.Equals("-1"))
+                    Finished?.Invoke(false);
 
-                } else if (result.Equals("-1")) {
-                    SearchFinished?.Invoke(false, result);
+                else if (!result.Equals("")) {
+                    LastSolution = new List<Operation>();
 
-                } else {
-                    SearchFinished?.Invoke(true, result);
+                    foreach (string op in result.Split('|'))
+                        if (op != "" && op != "0,0,0,0")
+                            LastSolution.Add(new Operation(op));
+
+                    Finished?.Invoke(true);
                 }
             });
         }
