@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Windows.Forms;
 
 using PerfectClearNET;
@@ -20,33 +21,25 @@ namespace Tester {
             {0,   0,   255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255},
         };
 
-        private void button1_Click(object sender, EventArgs e) {
-            label1.Text = "Started";
-            PerfectClear.Find(field, new int[] { 0, 2, 3, 6 }, 4, null);
-        }
+        private void Finished(bool success) {
+            Display.Text = success.ToString();
 
-        private void Aborted() {
-            label1.Text = "Aborted";
-        }
-
-        private void Finished(bool success, string result) {
-            label1.Text = $"{success} => {result}";
+            if (success)
+                Display.Text += $" => {string.Join("; ", PerfectClear.LastSolution.Select(i => i.ToString()))}";
         }
 
         private void MainForm_Load(object sender, EventArgs e) {
-            PerfectClear.SearchAborted += () => {
-                if (label1.InvokeRequired)
-                    Invoke(new PerfectClear.AbortedEventHandler(Aborted), new object[] { });
+            PerfectClear.Finished += (bool success) => {
+                if (Display.InvokeRequired)
+                    Invoke(new PerfectClear.FinishedEventHandler(Finished), new object[] { success });
                 else
-                    Aborted();
+                    Finished(success);
             };
+        }
 
-            PerfectClear.SearchFinished += (bool success, string result) => {
-                if (label1.InvokeRequired)
-                    Invoke(new PerfectClear.FinishedEventHandler(Finished), new object[] { success, result });
-                else
-                    Finished(success, result);
-            };
+        private void Run_Click(object sender, EventArgs e) {
+            Display.Text = "Started";
+            PerfectClear.Find(field, new int[] { 0, 2, 3, 6 }, 4, null);
         }
     }
 }
