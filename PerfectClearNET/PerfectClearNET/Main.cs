@@ -6,11 +6,23 @@ using System.Threading.Tasks;
 namespace PerfectClearNET {
     static class Interface {
         [DllImport("sfinder-dll.dll")]
-        private static extern void action(string field, string queue, string hold, int height, StringBuilder str, int len);
+        private static extern void action(string field, string queue, string hold, int height, ref bool abort, StringBuilder str, int len);
+
+        private static object locker = new object();
+        private static bool abort = false;
 
         public static string Process(string field, string queue, string hold, int height) {
             StringBuilder sb = new StringBuilder(500);
-            action(field, queue, hold, height, sb, sb.Capacity);
+
+            abort = true;
+
+            lock (locker) {
+                abort = false;
+                action(field, queue, hold, height, ref abort, sb, sb.Capacity);
+
+                if (abort) return "";
+            }
+
             return sb.ToString();
         }
     }
@@ -19,6 +31,12 @@ namespace PerfectClearNET {
         private static readonly string[] MinoMap = new string[7] {
             "Z", "S", "L", "J", "T", "O", "I"
         };
+
+        public delegate void AbortedEventHandler();
+        public static event AbortedEventHandler SearchAborted;
+
+        public delegate void FinishedEventHandler(bool success, string result);
+        public static event FinishedEventHandler SearchFinished;
 
         static PerfectClear() {}
 
@@ -37,7 +55,6 @@ namespace PerfectClearNET {
                         if (t == -1) t = i;
                     }
                 }
-                    
 
             string q = MinoMap[current];
 
@@ -52,9 +69,15 @@ namespace PerfectClearNET {
 
             await Task.Run(() => {
                 result = Interface.Process(f, q, h, t);
-                
-                if (!result.Equals("-1")) {
-                    int a = 123;
+
+                if (result.Equals("")) {
+                    SearchAborted?.Invoke();
+
+                } else if (result.Equals("-1")) {
+                    SearchFinished?.Invoke(false, result);
+
+                } else {
+                    SearchFinished?.Invoke(true, result);
                 }
             });
         }

@@ -25,6 +25,9 @@ namespace finder {
             const Candidate &candidate,
             Solution &solution
     ) {
+
+		if (&(configure.abort)) return false;
+
         auto depth = candidate.depth;
 
         auto maxDepth = configure.maxDepth;
@@ -37,7 +40,7 @@ namespace finder {
         assert(0 <= currentIndex && currentIndex <= configure.pieceSize);
         auto holdIndex = candidate.holdIndex;
         assert(-1 <= holdIndex && holdIndex < configure.pieceSize);
-
+		
         auto &field = candidate.field;
 
         bool canUseCurrent = currentIndex < configure.pieceSize;
@@ -190,7 +193,7 @@ namespace finder {
     template<>
     Solution PerfectFinder<core::srs::MoveGenerator>::run(
             const core::Field &field, const std::vector<core::PieceType> &pieces,
-            int maxDepth, int maxLine, bool holdEmpty
+            int maxDepth, int maxLine, bool holdEmpty, bool* abort
     ) {
         auto freeze = core::Field(field);
 
@@ -206,6 +209,7 @@ namespace finder {
                 movePool,
                 maxDepth,
                 static_cast<int>(pieces.size()),
+				abort
         };
 
         Candidate candidate = holdEmpty
