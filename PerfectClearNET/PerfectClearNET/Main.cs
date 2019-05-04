@@ -29,7 +29,7 @@ namespace PerfectClearNET {
 
     public static class PerfectClear {
         private static readonly string[] MinoMap = new string[7] {
-            "Z", "S", "L", "J", "T", "O", "I"
+            "S", "Z", "L", "J", "T", "O", "I"
         };
 
         public delegate void AbortedEventHandler();
