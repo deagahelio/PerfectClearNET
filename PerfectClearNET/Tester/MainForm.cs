@@ -21,8 +21,8 @@ namespace Tester {
         };
 
         private void button1_Click(object sender, EventArgs e) {
-            PerfectClear.Find(field, new int[] { 0, 2, 3, 6 }, 4, null);
             label1.Text = "Started";
+            PerfectClear.Find(field, new int[] { 0, 2, 3, 6 }, 4, null);
         }
 
         private void Aborted() {
