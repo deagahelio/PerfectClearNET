@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -19,14 +20,21 @@ namespace PerfectClearNET {
         private static object locker = new object();
         private static bool abort = false;
 
-        public static string Process(string field, string queue, string hold, int height) {
+        public static string Process(string field, string queue, string hold, int height, out long time) {
             StringBuilder sb = new StringBuilder(500);
 
             abort = true;
 
             lock (locker) {
                 abort = false;
+
+                Stopwatch stopwatch = new Stopwatch();
+                stopwatch.Start();
+
                 action(field, queue, hold, height, ref abort, sb, sb.Capacity);
+
+                stopwatch.Stop();
+                time = stopwatch.ElapsedMilliseconds;
 
                 if (abort) return "";
             }
@@ -70,6 +78,7 @@ namespace PerfectClearNET {
         public static event FinishedEventHandler Finished;
 
         public static List<Operation> LastSolution = new List<Operation>();
+        public static long LastTime = 0;
 
         static PerfectClear() {}
 
@@ -101,20 +110,22 @@ namespace PerfectClearNET {
             string result = "";
 
             await Task.Run(() => {
-                result = Interface.Process(f, q, h, t);
+                result = Interface.Process(f, q, h, t, out long time);
 
-                if (result.Equals("-1"))
-                    Finished?.Invoke(false);
+                if (result.Equals("")) return;
 
-                else if (!result.Equals("")) {
-                    LastSolution = new List<Operation>();
+                LastSolution = new List<Operation>();
+                LastTime = time;
 
+                bool solved = !result.Equals("-1");
+
+                if (solved) {
                     foreach (string op in result.Split('|'))
                         if (op != "" && op != "0,0,0,0")
                             LastSolution.Add(new Operation(op));
-
-                    Finished?.Invoke(true);
                 }
+
+                Finished?.Invoke(solved);
             });
         }
     }

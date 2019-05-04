@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
 using System.Linq;
 using System.Windows.Forms;
 
@@ -8,8 +7,6 @@ using PerfectClearNET;
 namespace Tester {
     public partial class MainForm: Form {
         public MainForm() => InitializeComponent();
-
-        Stopwatch benchmark;
 
         int[,] field = new int[10, 40] {
             {0,   0,   255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255},
@@ -25,9 +22,7 @@ namespace Tester {
         };
 
         private void Finished(bool success) {
-            benchmark.Stop();
-
-            Display.Text = $"{benchmark.ElapsedMilliseconds}ms {success.ToString()}";
+            Display.Text = $"{PerfectClear.LastTime}ms {success.ToString()}";
 
             if (success)
                 Display.Text += $" => {string.Join("; ", PerfectClear.LastSolution.Select(i => i.ToString()))}";
@@ -44,9 +39,6 @@ namespace Tester {
 
         private void Run_Click(object sender, EventArgs e) {
             Display.Text = "Started";
-
-            benchmark = new Stopwatch();
-            benchmark.Start();
 
             PerfectClear.Find(field, new int[] { 0, 2, 3, 6 }, 4, null);
         }
