@@ -45,14 +45,14 @@ namespace PerfectClearNET {
             int t = -1;
             string f = "";
 
-            for (int i = 0; i < 20; i++)
+            for (int i = 19; i >= 0; i--)
                 for (int j = 0; j < 10; j++) {
-                    if (field[j, 19 - i] == 255) {
+                    if (field[j, i] == 255) {
                         f += '_';
                         c += 1;
                     } else {
                         f += 'X';
-                        if (t == -1) t = i;
+                        if (t == -1) t = i + 1;
                     }
                 }
 
