@@ -22,6 +22,31 @@ namespace Tester {
 
         private void button1_Click(object sender, EventArgs e) {
             PerfectClear.Find(field, new int[] { 0, 2, 3, 6 }, 4, null);
+            label1.Text = "Started";
+        }
+
+        private void Aborted() {
+            label1.Text = "Aborted";
+        }
+
+        private void Finished(bool success, string result) {
+            label1.Text = $"{success} => {result}";
+        }
+
+        private void MainForm_Load(object sender, EventArgs e) {
+            PerfectClear.SearchAborted += () => {
+                if (label1.InvokeRequired)
+                    Invoke(new PerfectClear.AbortedEventHandler(Aborted), new object[] { });
+                else
+                    Aborted();
+            };
+
+            PerfectClear.SearchFinished += (bool success, string result) => {
+                if (label1.InvokeRequired)
+                    Invoke(new PerfectClear.FinishedEventHandler(Finished), new object[] { success, result });
+                else
+                    Finished(success, result);
+            };
         }
     }
 }
