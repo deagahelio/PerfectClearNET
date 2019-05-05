@@ -26,7 +26,8 @@ namespace finder {
             Solution &solution
     ) {
 
-		if (*(configure.abort)) return false;
+		if (*(configure.abort))
+			return false;
 
         auto depth = candidate.depth;
 

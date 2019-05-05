@@ -36,7 +36,8 @@ namespace PerfectClearNET {
                 stopwatch.Stop();
                 time = stopwatch.ElapsedMilliseconds;
 
-                if (abort) return "";
+                if (abort)
+                    return "";
             }
 
             return sb.ToString();
