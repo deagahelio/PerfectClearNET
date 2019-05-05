@@ -45,7 +45,7 @@ namespace PerfectClearNET {
 
     public static class Mino {
         public static readonly string[] ToChar = new string[7] {
-            "S", "Z", "L", "J", "T", "O", "I"
+            "S", "Z", "J", "L", "T", "O", "I"
         };
 
         public static readonly int[] FromFinder = new int[7] {
