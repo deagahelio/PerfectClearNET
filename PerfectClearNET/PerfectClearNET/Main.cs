@@ -129,10 +129,10 @@ namespace PerfectClearNET {
             await Task.Run(() => {
                 result = Interface.Process(f, q, h, t, out long time);
 
-                if (result.Equals("")) return;
-
                 LastSolution = new List<Operation>();
                 LastTime = time;
+
+                if (result.Equals("")) return;
 
                 bool solved = !result.Equals("-1");
 
