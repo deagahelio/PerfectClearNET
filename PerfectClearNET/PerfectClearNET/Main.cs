@@ -122,7 +122,7 @@ namespace PerfectClearNET {
 
             string h = (hold == null) ? "E" : Mino.ToChar[hold.Value];
 
-            if (c % 4 == 2) t += 1;
+            if ((c % 4 == 2 && t % 2 == 0) || (c % 4 == 0 && t % 2 == 1)) t += 1;
 
             string result = "";
 
