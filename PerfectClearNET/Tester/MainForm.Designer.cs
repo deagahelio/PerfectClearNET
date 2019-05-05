@@ -53,7 +53,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(16)))), ((int)(((byte)(16)))), ((int)(((byte)(16)))));
-            this.ClientSize = new System.Drawing.Size(414, 50);
+            this.ClientSize = new System.Drawing.Size(837, 50);
             this.Controls.Add(this.Display);
             this.Controls.Add(this.Run);
             this.ForeColor = System.Drawing.Color.Gainsboro;

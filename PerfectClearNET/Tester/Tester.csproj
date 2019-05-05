@@ -88,6 +88,10 @@
       <Project>{f71bf46c-2c69-40af-a5df-a73e25a21997}</Project>
       <Name>sfinder-dll</Name>
     </ProjectReference>
+    <ProjectReference Include="C:\Users\mat1jaczyyy\Desktop\MisaMino\MisaMinoNET\MisaMinoNET\MisaMinoNET.csproj">
+      <Project>{aa5ba1ec-c51b-49f2-be93-b018601e8111}</Project>
+      <Name>MisaMinoNET</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

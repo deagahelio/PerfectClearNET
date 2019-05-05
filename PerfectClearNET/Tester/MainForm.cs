@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
 
+using MisaMinoNET;
 using PerfectClearNET;
 
 namespace Tester {
@@ -24,8 +26,24 @@ namespace Tester {
         private void Finished(bool success) {
             Display.Text = $"{PerfectClear.LastTime}ms {success.ToString()}";
 
-            if (success)
-                Display.Text += $" => {string.Join("; ", PerfectClear.LastSolution.Select(i => i.ToString()))}";
+            if (success) {
+                Display.Text += $" => {string.Join("; ", PerfectClear.LastSolution.Select(i => i.ToString()))} ";
+
+                bool spinUsed = false;
+
+                List<Instruction> result = MisaMino.FindPath(
+                    field,
+                    21,
+                    PerfectClear.LastSolution[0].Piece,
+                    PerfectClear.LastSolution[0].X,
+                    PerfectClear.LastSolution[0].Y,
+                    PerfectClear.LastSolution[0].R,
+                    false,
+                    ref spinUsed
+                );
+
+                Display.Text += string.Join(", ", result);
+            }
         }
 
         private void MainForm_Load(object sender, EventArgs e) {
