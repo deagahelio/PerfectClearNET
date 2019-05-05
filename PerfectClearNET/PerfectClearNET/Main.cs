@@ -55,22 +55,22 @@ namespace PerfectClearNET {
 
     public class Operation {
         #pragma warning disable 0169
-        int piece;
-        int x;
-        int y;
-        int r;
+        public int Piece { get; private set; }
+        public int X { get; private set; }
+        public int Y { get; private set; }
+        public int R { get; private set; }
         #pragma warning restore 0169
 
         public Operation(string input) {
             List<int> parsed = (from i in input.Split(',') select Convert.ToInt32(i)).ToList();
 
-            piece = Mino.FromFinder[parsed[0]];
-            x = parsed[1];
-            y = parsed[2];
-            r = parsed[3];
+            Piece = Mino.FromFinder[parsed[0]];
+            X = parsed[1];
+            Y = 23 - parsed[2];
+            R = parsed[3];
         }
 
-        public override string ToString() => $"{Mino.ToChar[piece]}={x},{y},{r}";
+        public override string ToString() => $"{Mino.ToChar[Piece]}={X},{Y},{R}";
     }
 
     public static class PerfectClear {

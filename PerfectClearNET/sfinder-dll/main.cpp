@@ -52,9 +52,9 @@ DLL void action(const char* _field, const char* _queue, const char* _hold, int h
 
 			for (const auto &item : result)
 				out << item.pieceType << ","
-				<< item.rotateType << ","
 				<< item.x << ","
-				<< item.y << "|";
+				<< item.y << ","
+				<< item.rotateType << "|";
 
 			break;
 		}
