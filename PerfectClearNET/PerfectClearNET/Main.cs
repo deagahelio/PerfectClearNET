@@ -14,11 +14,25 @@ using System.Threading.Tasks;
 
 namespace PerfectClearNET {
     static class Interface {
+        private static bool abort = false;
+
+        private delegate bool Callback();
+        private static Callback AbortCallback;
+
         [DllImport("sfinder-dll.dll")]
-        private static extern void action(string field, string queue, string hold, int height, ref bool abort, StringBuilder str, int len);
+        private static extern void set_abort(Callback func);
 
         private static object locker = new object();
-        private static bool abort = false;
+
+        [DllImport("sfinder-dll.dll")]
+        private static extern void action(string field, string queue, string hold, int height, StringBuilder str, int len);
+
+        static Interface() {
+            AbortCallback = new Callback(Abort);
+            set_abort(AbortCallback);
+        }
+
+        public static bool Abort() => abort;
 
         public static string Process(string field, string queue, string hold, int height, out long time) {
             StringBuilder sb = new StringBuilder(500);
@@ -31,7 +45,7 @@ namespace PerfectClearNET {
                 Stopwatch stopwatch = new Stopwatch();
                 stopwatch.Start();
 
-                action(field, queue, hold, height, ref abort, sb, sb.Capacity);
+                action(field, queue, hold, height, sb, sb.Capacity);
 
                 stopwatch.Stop();
                 time = stopwatch.ElapsedMilliseconds;

@@ -7,6 +7,7 @@
 #include <sstream>
 #include <vector>
 
+#include "callback.hpp"
 #include "core/field.hpp"
 #include "finder/perfect.hpp"
 

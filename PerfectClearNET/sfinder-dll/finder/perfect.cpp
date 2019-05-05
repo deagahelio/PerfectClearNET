@@ -26,7 +26,7 @@ namespace finder {
             Solution &solution
     ) {
 
-		if (*(configure.abort))
+		if (Abort())
 			return false;
 
         auto depth = candidate.depth;
@@ -144,7 +144,6 @@ namespace finder {
             assert(nextIndex < pieces.size() + 1);
 
             if (nextIndex < configure.pieceSize && pieces[currentIndex] != pieces[nextIndex]) {
-                assert(pieces.at(nextIndex));
                 auto &next = pieces[nextIndex];
 
                 moves.clear();
@@ -194,7 +193,7 @@ namespace finder {
     template<>
     Solution PerfectFinder<core::srs::MoveGenerator>::run(
             const core::Field &field, const std::vector<core::PieceType> &pieces,
-            int maxDepth, int maxLine, bool holdEmpty, bool* abort
+            int maxDepth, int maxLine, bool holdEmpty
     ) {
         auto freeze = core::Field(field);
 
@@ -209,8 +208,7 @@ namespace finder {
                 pieces,
                 movePool,
                 maxDepth,
-                static_cast<int>(pieces.size()),
-				abort
+                static_cast<int>(pieces.size())
         };
 
         Candidate candidate = holdEmpty
