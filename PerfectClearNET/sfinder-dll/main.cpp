@@ -44,7 +44,7 @@ DLL void action(const char* _field, const char* _queue, const char* _hold, int h
 
 	bool solved = false;
 
-	for (int i = height; i <= 20; i += 4) {
+	for (int i = height; i <= 20; i += 2) {
 		auto result = pcfinder.run(field, pieces, pieces.size(), i, holdEmpty, abort);
 
 		if (!result.empty()) {

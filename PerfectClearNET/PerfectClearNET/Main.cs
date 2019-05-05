@@ -98,6 +98,8 @@ namespace PerfectClearNET {
                     }
                 }
 
+            if (t == -1) t = 2;
+
             string q = Mino.ToChar[current];
 
             for (int i = 0; i < queue.Length; i++)
