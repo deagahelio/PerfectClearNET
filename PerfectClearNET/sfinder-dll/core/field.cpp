@@ -83,7 +83,7 @@ namespace core {
         BlocksMask mask = blocks.mask(leftX, lowerY - 6 * index);
 
         if (index <= 2) {
-            return (boards[index] & mask.low) == 0 && (boards[index + 1] && mask.high) == 0;
+            return (boards[index] & mask.low) == 0 && (boards[index + 1] & mask.high) == 0;
         }
 
         return (boards[index] & mask.low) == 0;
@@ -190,7 +190,7 @@ namespace core {
     }
 
     int Field::getBlockOnX(int x, int maxY) const {
-        assert(0 <= maxY && maxY < MAX_FIELD_HEIGHT);
+        assert(0 <= maxY && maxY <= MAX_FIELD_HEIGHT);
 
         if (maxY < 12) {
             if (maxY < 6) {
@@ -221,7 +221,7 @@ namespace core {
     }
 
     bool Field::isWallBetween(int x, int maxY) const {
-        assert(0 <= maxY && maxY < MAX_FIELD_HEIGHT);
+        assert(0 <= maxY && maxY <= MAX_FIELD_HEIGHT);
 
         if (maxY == 0) {
             return true;
