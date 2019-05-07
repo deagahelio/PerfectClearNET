@@ -54,7 +54,8 @@ namespace Tester {
                     PerfectClear.LastSolution[0].Y,
                     PerfectClear.LastSolution[0].R,
                     false,
-                    ref spinUsed
+                    ref spinUsed,
+                    out bool _
                 );
 
                 Display.Text += string.Join(", ", result);

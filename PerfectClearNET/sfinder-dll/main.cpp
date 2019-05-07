@@ -32,6 +32,10 @@ core::PieceType charToPiece(char x) {
 }
 
 DLL void action(const char* _field, const char* _queue, const char* _hold, int height, char* _str, int _len) {
+	core::Factory factory = core::Factory::create();
+	core::srs::MoveGenerator moveGenerator = core::srs::MoveGenerator(factory);
+	finder::PerfectFinder<core::srs::MoveGenerator> pcfinder = finder::PerfectFinder<core::srs::MoveGenerator>(factory, moveGenerator);
+
 	auto field = core::createField(_field);
 
 	auto pieces = std::vector<core::PieceType>();
