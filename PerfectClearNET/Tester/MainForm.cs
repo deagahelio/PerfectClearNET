@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 
 using MisaMinoNET;
@@ -63,24 +64,31 @@ namespace Tester {
         }
 
         private void MainForm_Load(object sender, EventArgs e) {
-            PerfectClear.Finished += (bool success) => {
+            PerfectClear.Finished += async (bool success) => {
                 if (Display.InvokeRequired)
-                    Invoke(new PerfectClear.FinishedEventHandler(Finished), new object[] { success });
-                else
-                    Finished(success);
+                    await Task.Run(() => {
+                        Invoke(new PerfectClear.FinishedEventHandler(Finished), new object[] { success });
+                    });
+
+                else Finished(success);
             };
         }
 
         private void Run1_Click(object sender, EventArgs e) {
             Display.Text = "Started 1";
 
-            PerfectClear.Find(fieldUsed = field1, new int[] { 2, 0, 3, 0 }, 6, 4);
+            PerfectClear.Find(fieldUsed = field1, new int[] { 2, 0, 3, 0 }, 6, 4, false, 0);
         }
 
         private void Run2_Click(object sender, EventArgs e) {
-            Display.Text = "Started 2";
+            if (PerfectClear.Running) {
+                PerfectClear.Abort();
 
-            PerfectClear.Find(fieldUsed = field2, new int[] { 1, 2, 4, 3, 6, 0, 0, 5, 2, 3, 6 }, 5, null);
+            } else {
+                Display.Text = "Started 2";
+
+                PerfectClear.Find(fieldUsed = field2, new int[] { 1, 2, 4, 3, 6, 0, 0, 5, 2, 3, 6 }, 5, null, true, 0);
+            }
         }
     }
 }

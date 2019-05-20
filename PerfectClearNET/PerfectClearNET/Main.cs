@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 // Suppresses readonly suggestion
@@ -23,9 +24,10 @@ namespace PerfectClearNET {
         private static extern void set_abort(Callback func);
 
         private static object locker = new object();
+        public static bool Running { get; private set; } = false;
 
         [DllImport("sfinder-dll.dll")]
-        private static extern void action(string field, string queue, string hold, int height, StringBuilder str, int len);
+        private static extern void action(string field, string queue, string hold, int height, bool swap, int combo, StringBuilder str, int len);
 
         static Interface() {
             AbortCallback = new Callback(Abort);
@@ -33,8 +35,11 @@ namespace PerfectClearNET {
         }
 
         public static bool Abort() => abort;
+        public static void SetAbort() {
+            if (Running) abort = true;
+        }
 
-        public static string Process(string field, string queue, string hold, int height, out long time) {
+        public static string Process(string field, string queue, string hold, int height, bool swap, int combo, out long time) {
             StringBuilder sb = new StringBuilder(500);
 
             abort = true;
@@ -45,13 +50,14 @@ namespace PerfectClearNET {
                 Stopwatch stopwatch = new Stopwatch();
                 stopwatch.Start();
 
-                action(field, queue, hold, height, sb, sb.Capacity);
+                Running = true;
+
+                action(field, queue, hold, height, swap, combo, sb, sb.Capacity);
+
+                Running = false;
 
                 stopwatch.Stop();
                 time = stopwatch.ElapsedMilliseconds;
-
-                if (abort)
-                    return "";
             }
 
             return sb.ToString();
@@ -95,9 +101,23 @@ namespace PerfectClearNET {
         public static List<Operation> LastSolution = new List<Operation>();
         public static long LastTime = 0;
 
+        public static bool Running { get => Interface.Running; }
+
         static PerfectClear() {}
 
-        public static async void Find(int[,] field, int[] queue, int current, int? hold) {
+        static ManualResetEvent abortWait;
+
+        public static void Abort() {
+            if (Interface.Running) {
+                abortWait = new ManualResetEvent(false);
+
+                Interface.SetAbort();
+
+                abortWait.WaitOne();
+            }
+        }
+
+        public static async void Find(int[,] field, int[] queue, int current, int? hold, bool swap, int combo) {
             int c = 0;
             int t = -1;
             string f = "";
@@ -127,12 +147,10 @@ namespace PerfectClearNET {
             string result = "";
 
             await Task.Run(() => {
-                result = Interface.Process(f, q, h, t, out long time);
+                result = Interface.Process(f, q, h, t, swap, combo, out long time);
 
                 LastSolution = new List<Operation>();
                 LastTime = time;
-
-                if (result.Equals("")) return;
 
                 bool solved = !result.Equals("-1");
 
@@ -143,6 +161,8 @@ namespace PerfectClearNET {
                 }
 
                 Finished?.Invoke(solved);
+
+                abortWait?.Set();
             });
         }
     }
