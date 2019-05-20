@@ -75,9 +75,14 @@ namespace Tester {
         }
 
         private void Run1_Click(object sender, EventArgs e) {
-            Display.Text = "Started 1";
+            if (PerfectClear.Running) {
+                PerfectClear.Abort();
 
-            PerfectClear.Find(fieldUsed = field1, new int[] { 2, 0, 3, 0 }, 6, 4, false, 0);
+            } else {
+                Display.Text = "Started 1";
+
+                PerfectClear.Find(fieldUsed = field1, new int[] { 2, 0, 3, 0 }, 6, 4, false, 0);
+            }
         }
 
         private void Run2_Click(object sender, EventArgs e) {
