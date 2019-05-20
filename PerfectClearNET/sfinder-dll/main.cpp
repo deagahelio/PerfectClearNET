@@ -31,7 +31,7 @@ core::PieceType charToPiece(char x) {
 	}
 }
 
-DLL void action(const char* _field, const char* _queue, const char* _hold, int height, char* _str, int _len) {
+DLL void action(const char* _field, const char* _queue, const char* _hold, int height, bool swap, int combo, char* _str, int _len) {
 	auto field = core::createField(_field);
 
 	auto pieces = std::vector<core::PieceType>();
@@ -49,7 +49,7 @@ DLL void action(const char* _field, const char* _queue, const char* _hold, int h
 	bool solved = false;
 
 	for (int i = height; i <= 20; i += 2) {
-		auto result = pcfinder.run(field, pieces, pieces.size(), i, holdEmpty);
+		auto result = pcfinder.run(field, pieces, pieces.size(), i, holdEmpty, !swap, combo);
 
 		if (!result.empty()) {
 			solved = true;
