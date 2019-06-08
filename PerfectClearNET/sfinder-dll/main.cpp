@@ -54,13 +54,14 @@ DLL void action(const char* _field, const char* _queue, const char* _hold, int h
 		if (!result.empty()) {
 			solved = true;
 
-			for (const auto &item : result)
+			for (const auto &item : result) {
 				out << item.pieceType << ","
-				<< item.x << ","
-				<< item.y << ","
-				<< item.rotateType << "|";
+					<< item.x << ","
+					<< item.y << ","
+					<< item.rotateType << "|";
+			}
 
-			break;
+			i = 100;
 		}
 	}
 
