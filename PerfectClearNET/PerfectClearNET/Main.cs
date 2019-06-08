@@ -156,7 +156,7 @@ namespace PerfectClearNET {
 
                 if (solved) {
                     foreach (string op in result.Split('|'))
-                        if (op != "" && op != "0,0,0,0")
+                        if (op != "" && op != "0,-1,-1,0")
                             LastSolution.Add(new Operation(op));
                 }
 
