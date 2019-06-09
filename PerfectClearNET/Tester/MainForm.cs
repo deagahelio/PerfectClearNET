@@ -92,7 +92,7 @@ namespace Tester {
             } else {
                 Display.Text = "Started 2";
 
-                PerfectClear.Find(fieldUsed = field2, new int[] { 1, 2, 4, 3, 6, 0, 0, 5, 2, 3, 6 }, 5, null, true, 0);
+                PerfectClear.Find(fieldUsed = field2, new int[] { 6, 0, 2, 3, 1, 4, 0, 2, 5, 1 }, 4, null, false, 0);
             }
         }
     }
