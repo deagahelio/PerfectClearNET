@@ -31,6 +31,7 @@ namespace finder {
         const int maxCombo;
         const int tSpinAttack;
         const bool b2b;
+        const int leftNumOfT;
     };
 
     struct Configure {
@@ -58,12 +59,6 @@ namespace finder {
         int lineClearCount;
         int maxCombo;
         int tSpinAttack;
-    };
-
-    struct MoveComparator {
-        static inline bool cmp(const core::Move &lhs, const core::Move &rhs) {
-            return lhs.y < rhs.y;
-        }
     };
 
     TSpinShapes getTSpinShape(const core::Field &field, int x, int y, core::RotateType rotateType);
