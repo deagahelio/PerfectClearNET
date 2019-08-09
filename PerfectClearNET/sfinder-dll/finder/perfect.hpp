@@ -38,7 +38,8 @@ namespace finder {
         const std::vector<core::PieceType> &pieces;
         std::vector<std::vector<core::Move>> &movePool;
         const int maxDepth;
-        const int pieceSize;
+		const int pieceSize;
+		const bool holdAllowed;
         const bool leastLineClears;
     };
 
@@ -82,7 +83,7 @@ namespace finder {
 
         Solution run(
                 const core::Field &field, const std::vector<core::PieceType> &pieces,
-                int maxDepth, int maxLine, bool holdEmpty, bool leastLineClears, int initCombo
+                int maxDepth, int maxLine, bool holdEmpty, bool holdAllowed, bool leastLineClears, int initCombo
         );
 
     private:

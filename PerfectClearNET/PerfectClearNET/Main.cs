@@ -117,7 +117,7 @@ namespace PerfectClearNET {
             }
         }
 
-        public static async void Find(int[,] field, int[] queue, int current, int? hold, bool swap, int combo) {
+        public static async void Find(int[,] field, int[] queue, int current, int? hold, bool holdAllowed, bool swap, int combo) {
             int c = 0;
             int t = -1;
             string f = "";
@@ -141,6 +141,7 @@ namespace PerfectClearNET {
                 q += Mino.ToChar[queue[i]];
 
             string h = (hold == null) ? "E" : Mino.ToChar[hold.Value];
+            if (!holdAllowed) h = "X";
 
             if ((c % 4 == 2 && t % 2 == 0) || (c % 4 == 0 && t % 2 == 1)) t += 1;
 

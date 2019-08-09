@@ -37,6 +37,7 @@ DLL void action(const char* _field, const char* _queue, const char* _hold, int h
 	auto pieces = std::vector<core::PieceType>();
 
 	bool holdEmpty = _hold[0] == 'E';
+	bool holdAllowed = _hold[0] != 'X';
 
 	if (!holdEmpty)
 		pieces.push_back(charToPiece(_hold[0]));
@@ -49,7 +50,7 @@ DLL void action(const char* _field, const char* _queue, const char* _hold, int h
 	bool solved = false;
 
 	for (int i = height; i <= 20; i += 2) {
-		auto result = pcfinder.run(field, pieces, pieces.size(), i, holdEmpty, !swap, combo);
+		auto result = pcfinder.run(field, pieces, pieces.size(), i, holdEmpty, holdAllowed, !swap, combo);
 
 		if (!result.empty()) {
 			solved = true;

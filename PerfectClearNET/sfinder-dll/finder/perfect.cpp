@@ -292,6 +292,8 @@ namespace finder {
             move(configure, candidate, solution, moves, current, currentIndex + 1, holdIndex, holdCount);
         }
 
+		if (!configure.holdAllowed) return;
+		
         if (0 <= holdIndex) {
             assert(holdIndex < pieces.size());
 
@@ -411,7 +413,7 @@ namespace finder {
     template<>
     Solution PerfectFinder<core::srs::MoveGenerator>::run(
             const core::Field &field, const std::vector<core::PieceType> &pieces,
-            int maxDepth, int maxLine, bool holdEmpty, bool leastLineClears, int initCombo
+            int maxDepth, int maxLine, bool holdEmpty, bool holdAllowed, bool leastLineClears, int initCombo
     ) {
         assert(1 <= maxDepth);
 
@@ -438,6 +440,7 @@ namespace finder {
                 movePool,
                 maxDepth,
                 static_cast<int>(pieces.size()),
+				holdAllowed,
                 leastLineClears,
         };
 
@@ -469,6 +472,6 @@ namespace finder {
             const core::Field &field, const std::vector<core::PieceType> &pieces,
             int maxDepth, int maxLine, bool holdEmpty
     ) {
-        return run(field, pieces, maxDepth, maxLine, holdEmpty, true, 0);
+        return run(field, pieces, maxDepth, maxLine, holdEmpty, true, true, 0);
     }
 }
