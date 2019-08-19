@@ -27,7 +27,7 @@ namespace PerfectClearNET {
         public static bool Running { get; private set; } = false;
 
         [DllImport("sfinder-dll.dll")]
-        private static extern void action(string field, string queue, string hold, int height, bool swap, int combo, StringBuilder str, int len);
+        private static extern void action(string field, string queue, string hold, int height, int max_height, bool swap, int combo, StringBuilder str, int len);
 
         static Interface() {
             AbortCallback = new Callback(Abort);
@@ -39,7 +39,7 @@ namespace PerfectClearNET {
             if (Running) abort = true;
         }
 
-        public static string Process(string field, string queue, string hold, int height, bool swap, int combo, out long time) {
+        public static string Process(string field, string queue, string hold, int height, int max_height, bool swap, int combo, out long time) {
             StringBuilder sb = new StringBuilder(500);
 
             abort = true;
@@ -52,7 +52,7 @@ namespace PerfectClearNET {
 
                 Running = true;
 
-                action(field, queue, hold, height, swap, combo, sb, sb.Capacity);
+                action(field, queue, hold, height, max_height, swap, combo, sb, sb.Capacity);
 
                 Running = false;
 
@@ -117,7 +117,7 @@ namespace PerfectClearNET {
             }
         }
 
-        public static async void Find(int[,] field, int[] queue, int current, int? hold, bool holdAllowed, bool swap, int combo) {
+        public static async void Find(int[,] field, int[] queue, int current, int? hold, bool holdAllowed, int maxHeight, bool swap, int combo) {
             int c = 0;
             int t = -1;
             string f = "";
@@ -148,7 +148,7 @@ namespace PerfectClearNET {
             string result = "";
 
             await Task.Run(() => {
-                result = Interface.Process(f, q, h, t, swap, combo, out long time);
+                result = Interface.Process(f, q, h, t, maxHeight, swap, combo, out long time);
 
                 LastSolution = new List<Operation>();
                 LastTime = time;
