@@ -33,6 +33,12 @@
     <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="MisaMino, Version=0.0.0.0, Culture=neutral, processorArchitecture=AMD64">
+      <HintPath>..\packages\MisaMinoNET.1.0.1\lib\net45\MisaMino.dll</HintPath>
+    </Reference>
+    <Reference Include="MisaMinoNET, Version=1.0.1.0, Culture=neutral, processorArchitecture=AMD64">
+      <HintPath>..\packages\MisaMinoNET.1.0.1\lib\net45\MisaMinoNET.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -66,6 +72,7 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -87,14 +94,6 @@
     <ProjectReference Include="..\sfinder-dll\sfinder-dll.vcxproj">
       <Project>{f71bf46c-2c69-40af-a5df-a73e25a21997}</Project>
       <Name>sfinder-dll</Name>
-    </ProjectReference>
-    <ProjectReference Include="C:\Users\mat1jaczyyy\Desktop\MisaMino\MisaMinoNET\MisaMinoNET\MisaMinoNET.csproj">
-      <Project>{aa5ba1ec-c51b-49f2-be93-b018601e8111}</Project>
-      <Name>MisaMinoNET</Name>
-    </ProjectReference>
-    <ProjectReference Include="C:\Users\mat1jaczyyy\Desktop\MisaMino\MisaMinoNET\MisaMino\MisaMino.vcxproj">
-      <Project>{9b91bf39-f215-4609-b4bd-b203c8c4a70d}</Project>
-      <Name>MisaMino</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

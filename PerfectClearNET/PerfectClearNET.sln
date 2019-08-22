@@ -12,10 +12,6 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "sfinder-dll", "sfinder-dll\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tester", "Tester\Tester.csproj", "{4B48BC83-A776-498D-BF97-EF494575BA24}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MisaMinoNET", "C:\Users\mat1jaczyyy\Desktop\MisaMino\MisaMinoNET\MisaMinoNET\MisaMinoNET.csproj", "{AA5BA1EC-C51B-49F2-BE93-B018601E8111}"
-EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MisaMino", "C:\Users\mat1jaczyyy\Desktop\MisaMino\MisaMinoNET\MisaMino\MisaMino.vcxproj", "{9B91BF39-F215-4609-B4BD-B203C8C4A70D}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -34,14 +30,6 @@ Global
 		{4B48BC83-A776-498D-BF97-EF494575BA24}.Debug|x64.Build.0 = Debug|x64
 		{4B48BC83-A776-498D-BF97-EF494575BA24}.Release|x64.ActiveCfg = Release|x64
 		{4B48BC83-A776-498D-BF97-EF494575BA24}.Release|x64.Build.0 = Release|x64
-		{AA5BA1EC-C51B-49F2-BE93-B018601E8111}.Debug|x64.ActiveCfg = Debug|x64
-		{AA5BA1EC-C51B-49F2-BE93-B018601E8111}.Debug|x64.Build.0 = Debug|x64
-		{AA5BA1EC-C51B-49F2-BE93-B018601E8111}.Release|x64.ActiveCfg = Release|x64
-		{AA5BA1EC-C51B-49F2-BE93-B018601E8111}.Release|x64.Build.0 = Release|x64
-		{9B91BF39-F215-4609-B4BD-B203C8C4A70D}.Debug|x64.ActiveCfg = Debug|x64
-		{9B91BF39-F215-4609-B4BD-B203C8C4A70D}.Debug|x64.Build.0 = Debug|x64
-		{9B91BF39-F215-4609-B4BD-B203C8C4A70D}.Release|x64.ActiveCfg = Release|x64
-		{9B91BF39-F215-4609-B4BD-B203C8C4A70D}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
