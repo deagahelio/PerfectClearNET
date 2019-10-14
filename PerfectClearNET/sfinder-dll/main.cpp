@@ -28,6 +28,9 @@ core::PieceType charToPiece(char x) {
 
 		case 'I':
 			return core::PieceType::I;
+
+		default:
+			assert(true);
 	}
 }
 
