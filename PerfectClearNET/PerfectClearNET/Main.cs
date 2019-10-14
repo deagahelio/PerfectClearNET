@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Runtime.InteropServices;
-using System.Text;
+﻿using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -14,99 +9,55 @@ using System.Threading.Tasks;
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE1006")]
 
 namespace PerfectClearNET {
-    static class Interface {
-        private static bool abort = false;
-
-        private delegate bool Callback();
-        private static Callback AbortCallback;
-
-        [DllImport("sfinder-dll.dll")]
-        private static extern void set_abort(Callback func);
-
-        private static object locker = new object();
-        public static bool Running { get; private set; } = false;
-
-        [DllImport("sfinder-dll.dll")]
-        private static extern void action(string field, string queue, string hold, int height, int max_height, bool swap, int combo, StringBuilder str, int len);
-
-        static Interface() {
-            AbortCallback = new Callback(Abort);
-            set_abort(AbortCallback);
-        }
-
-        public static bool Abort() => abort;
-        public static void SetAbort() {
-            if (Running) abort = true;
-        }
-
-        public static string Process(string field, string queue, string hold, int height, int max_height, bool swap, int combo, out long time) {
-            StringBuilder sb = new StringBuilder(500);
-
-            abort = true;
-
-            lock (locker) {
-                abort = false;
-
-                Stopwatch stopwatch = new Stopwatch();
-                stopwatch.Start();
-
-                Running = true;
-
-                action(field, queue, hold, height, max_height, swap, combo, sb, sb.Capacity);
-
-                Running = false;
-
-                stopwatch.Stop();
-                time = stopwatch.ElapsedMilliseconds;
-            }
-
-            return sb.ToString();
-        }
-    }
-
-    public static class Mino {
+    /// <summary>
+    /// The main PerfectClear class.
+    /// Contains all methods for performing actions with the Perfect Clear Finder.
+    /// </summary>
+    public static class PerfectClear {
+        /// <summary>
+        /// Converts a piece's index to its regular string representation.
+        /// </summary>
         public static readonly string[] ToChar = new string[7] {
             "S", "Z", "J", "L", "T", "O", "I"
         };
 
+        /// <summary>
+        /// Converts a Finder piece's index to its regular index.
+        /// </summary>
         public static readonly int[] FromFinder = new int[7] {
             4, 6, 3, 2, 0, 1, 5
         };
-    }
 
-    public class Operation {
-        #pragma warning disable 0169
-        public int Piece { get; private set; }
-        public int X { get; private set; }
-        public int Y { get; private set; }
-        public int R { get; private set; }
-        #pragma warning restore 0169
-
-        public Operation(string input) {
-            List<int> parsed = (from i in input.Split(',') select Convert.ToInt32(i)).ToList();
-
-            Piece = Mino.FromFinder[parsed[0]];
-            X = parsed[1];
-            Y = 23 - parsed[2];
-            R = parsed[3];
-        }
-
-        public override string ToString() => $"{Mino.ToChar[Piece]}={X},{Y},{R}";
-    }
-
-    public static class PerfectClear {
+        /// <param name="success">Whether the search was successful or not.</param>
         public delegate void FinishedEventHandler(bool success);
+
+        /// <summary>
+        /// Fires when the Perfect Clear Finder reaches the end of its search, whether naturally or after it was aborted.
+        /// </summary>
         public static event FinishedEventHandler Finished;
 
+        /// <summary>
+        /// The latest search result from the most recent call to Find.
+        /// </summary>
         public static List<Operation> LastSolution = new List<Operation>();
+
+        /// <summary>
+        /// The amount of time the latest search took to complete.
+        /// </summary>
         public static long LastTime = 0;
 
+        /// <summary>
+        /// Checks if the Perfect Clear Finder is currently searching for solutions.
+        /// </summary>
         public static bool Running { get => Interface.Running; }
 
         static PerfectClear() {}
 
         static ManualResetEvent abortWait;
 
+        /// <summary>
+        /// Aborts the currently running search, if there is one.
+        /// </summary>
         public static void Abort() {
             if (Interface.Running) {
                 abortWait = new ManualResetEvent(false);
@@ -117,6 +68,21 @@ namespace PerfectClearNET {
             }
         }
 
+        /// <summary>
+        /// <para>Starts searching for a solution/decision for the given game state.</para>
+        /// <para>Pieces should be formatted with numbers from 0 to 6 in the order of SZJLTOI. Empty state on the field should be formatted with 255.</para>
+        /// <para>Since this method will begin a search in the background, it does not immediately return any data.</para>
+        /// <para>When the search ends, the Finished event will fire and LastSolution will update.</para>
+        /// <para>The search can be ended prematurely with the Abort method.</para>
+        /// </summary>
+        /// <param name="field">A 2D array consisting of the field. Should be no smaller than int[10, height].</param>
+        /// <param name="queue">The piece queue, can be of any size.</param>
+        /// <param name="current">The current piece.</param>
+        /// <param name="hold">The piece in hold. Should be null if empty.</param>
+        /// <param name="holdAllowed">Is holding is allowed in the game.</param>
+        /// <param name="maxHeight">The maximum allowed height of the Perfect Clear. Used to control greed.</param>
+        /// <param name="swap">Specifies if garbage blocking is enabled (from Puyo Puyo Tetris' Swap mode). If set to true, the Finder will prioritize PCs with a high combo.</param>
+        /// <param name="combo">The combo count.</param>
         public static async void Find(int[,] field, int[] queue, int current, int? hold, bool holdAllowed, int maxHeight, bool swap, int combo) {
             int c = 0;
             int t = -1;
@@ -135,12 +101,12 @@ namespace PerfectClearNET {
 
             if (t == -1) t = 2;
 
-            string q = Mino.ToChar[current];
+            string q = ToChar[current];
 
             for (int i = 0; i < queue.Length; i++)
-                q += Mino.ToChar[queue[i]];
+                q += ToChar[queue[i]];
 
-            string h = (hold == null) ? "E" : Mino.ToChar[hold.Value];
+            string h = (hold == null) ? "E" : ToChar[hold.Value];
             if (!holdAllowed) h = "X";
 
             if ((c % 4 == 2 && t % 2 == 0) || (c % 4 == 0 && t % 2 == 1)) t += 1;
