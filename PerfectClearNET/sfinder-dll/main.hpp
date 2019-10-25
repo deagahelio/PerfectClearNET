@@ -1,8 +1,7 @@
 #ifndef MAIN_H
 #define MAIN_H
 
-#include "Windows.h"
-#define DLL extern "C" __declspec(dllexport)
+#define DLL extern "C" __attribute__((visibility("default")))
 
 #include <sstream>
 #include <vector>

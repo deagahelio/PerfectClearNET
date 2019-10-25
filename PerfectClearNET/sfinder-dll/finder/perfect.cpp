@@ -1,4 +1,5 @@
 #include "perfect.hpp"
+#include <climits>
 
 namespace finder {
     namespace {
@@ -453,13 +454,14 @@ namespace finder {
                               : Candidate{freeze, 1, 0, maxLine, 0, 0, 0, 0, initCombo, initCombo, 0, true, leftNumOfT};
 
         // Create current record & best record
-        best = Record{
-                std::vector(solution),
+        Record temp {
+                std::vector<finder::Operation>(solution),
                 INT_MAX,
                 INT_MAX,
                 INT_MAX,
                 0,
         };
+        best = temp;
 
         // Execute
         search(configure, candidate, solution);

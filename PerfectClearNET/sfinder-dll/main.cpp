@@ -80,6 +80,10 @@ DLL void action(const char* _field, const char* _queue, const char* _hold, int h
 	std::copy(a.c_str(), a.c_str() + a.length() + 1, _str);
 }
 
-BOOL WINAPI DllMain(HANDLE handle, DWORD reason, LPVOID reserved) {
-	return TRUE;
+int main() {
+	return 0;
 }
+
+/*BOOL WINAPI DllMain(HANDLE handle, DWORD reason, LPVOID reserved) {
+	return TRUE;
+}*/
